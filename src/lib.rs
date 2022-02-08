@@ -1,4 +1,5 @@
 use std::{error::Error, fs};
+mod core;
 mod utils;
 pub use utils::*;
 
@@ -27,43 +28,22 @@ impl<'a> Config<'a> {
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let file = fs::read_to_string(config.file_location)?;
 
-    println!("{}", file);
+    let matches = core::search(config.query, &file);
+
+    utils::print_success_msg(config, matches.len());
+
+    for line in matches {
+        println!("{}", line)
+    }
 
     Ok(())
 }
 
-pub fn search<'a>(query: &str, content: &'a str) -> Vec<&'a str> {
-    let mut matches: Vec<&str> = vec![];
-
-    for line in content.lines() {
-        if line.contains(query) {
-            matches.push(line)
-        }
-    }
-
-    matches
-}
-
-#[cfg(test)]
-mod search_functionality {
-    use super::*;
-
-    #[test]
-    fn it_searches() {
-        let query = "Rust";
-        let content = "\
-The most loved programming languages are:
-1. Typescript.
-2. the Rust programming langauge.
-3. Kotlin.
-        ";
-
-        assert_eq!(
-            search(query, content),
-            ["2. the Rust programming langauge."]
-        );
-    }
-}
+// #[cfg(test)]
+// mod run_fn {
+//     #[test]
+//     fn
+// }
 
 #[cfg(test)]
 mod config_struct {
