@@ -1,0 +1,7 @@
+---
+source: src/utils.rs
+assertion_line: 24
+expression: err_msg
+
+---
+"\u{1b}[31mMemory Leak\u{1b}[0m\u{1b}[1m:\u{1b}[0m something went wrong"
