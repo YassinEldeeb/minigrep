@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 colored = "2"
 regex = "1.5.4"
+term = "*"
 
 [dev-dependencies]
 insta = "1.9.0"
