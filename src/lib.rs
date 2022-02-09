@@ -74,7 +74,7 @@ mod config_struct {
     fn not_enough_args() {
         let args = [0.to_string(), 1.to_string()];
         if let Err(msg) = Config::new(&args, false) {
-            assert_eq!(msg, "not enough arguments")
+            assert!(msg.contains("not enough arguments"))
         }
     }
 
