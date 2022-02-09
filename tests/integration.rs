@@ -8,7 +8,7 @@ fn it_works() {
         String::from("poem.txt"),
     ];
 
-    let config = minigrep::Config::new(&args).unwrap();
+    let config = minigrep::Config::new(&args, false).unwrap();
 
     assert!(minigrep::run(config).is_ok());
 }
@@ -21,7 +21,7 @@ fn it_does_not_work() {
         String::from("doesnt_exist.txt"),
     ];
 
-    let config = minigrep::Config::new(&args).unwrap();
+    let config = minigrep::Config::new(&args, false).unwrap();
 
     assert!(minigrep::run(config).is_err());
 }

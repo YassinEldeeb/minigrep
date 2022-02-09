@@ -9,7 +9,7 @@ where
     U: Display,
 {
     let error = format!("{}{} {}", error_type.red(), ":".bold(), error_msg);
-    println!("{}", error);
+    eprintln!("{}", error);
 }
 
 pub fn print_success_msg(config: Config, num_of_matches: usize) {
