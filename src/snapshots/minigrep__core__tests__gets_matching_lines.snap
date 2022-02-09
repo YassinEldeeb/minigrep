@@ -1,9 +1,0 @@
----
-source: src/core.rs
-assertion_line: 38
-expression: "search(query, content)"
-
----
-[
-    "3. 2. the \u{1b}[1;95mRust\u{1b}[0m programming langauge.",
-]

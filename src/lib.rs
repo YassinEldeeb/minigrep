@@ -29,21 +29,16 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let file = fs::read_to_string(config.file_location)?;
 
     let matches = core::search(config.query, &file);
+    let colorized_matches = core::colorize_matches(matches, config.query);
 
-    utils::print_success_msg(config, matches.len());
+    utils::print_success_msg(config, colorized_matches.len());
 
-    for line in matches {
+    for line in colorized_matches {
         println!("{}", line)
     }
 
     Ok(())
 }
-
-// #[cfg(test)]
-// mod run_fn {
-//     #[test]
-//     fn
-// }
 
 #[cfg(test)]
 mod config_struct {

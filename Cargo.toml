@@ -9,5 +9,3 @@ edition = "2021"
 colored = "2"
 term = "*"
 
-[dev-dependencies]
-insta = "1.9.0"
