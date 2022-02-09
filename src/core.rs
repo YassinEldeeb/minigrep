@@ -1,15 +1,11 @@
 use colored::Colorize;
-use regex::Regex;
 
 pub fn search(query: &str, content: &str) -> Vec<String> {
     let mut matches: Vec<String> = vec![];
 
     for (idx, line) in content.lines().enumerate() {
         if line.contains(query) {
-            let re = Regex::new(query).unwrap();
-            let colored = re
-                .replace_all(line, &query.bright_purple().bold().to_string())
-                .to_string();
+            let colored = str::replace(line, query, &query.bright_purple().bold().to_string());
 
             let formatted = format!("{}. {}", (idx + 1).to_string(), colored);
             matches.push(formatted);
