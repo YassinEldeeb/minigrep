@@ -4,31 +4,55 @@ use colored::Colorize;
 pub struct Match<'a> {
     index: usize,
     line: &'a str,
+    matched_query: &'a str,
 }
 
 impl<'a> Match<'a> {
-    fn new(line: &'a str, index: usize) -> Self {
-        Match { line, index }
+    fn new(matched_query: &'a str, line: &'a str, index: usize) -> Self {
+        Match {
+            matched_query,
+            line,
+            index,
+        }
     }
 }
 
-pub fn search<'a>(query: &str, content: &'a str) -> Vec<Match<'a>> {
+pub fn search<'a>(query: &'a str, content: &'a str) -> Vec<Match<'a>> {
     let mut matches: Vec<Match> = vec![];
 
     for (idx, line) in content.lines().enumerate() {
         if line.contains(query) {
-            matches.push(Match::new(line, idx));
+            matches.push(Match::new(query, line, idx));
         }
     }
 
     matches
 }
 
-pub fn colorize_matches(matches: Vec<Match>, query: &str) -> Vec<String> {
+pub fn search_insensitive<'a>(query: &'a str, content: &'a str) -> Vec<Match<'a>> {
+    let mut matches: Vec<Match> = vec![];
+
+    for (idx, line) in content.lines().enumerate() {
+        if line.to_lowercase().contains(&query.to_lowercase()) {
+            let start_idx_of_match = line.to_lowercase().find(&query.to_lowercase()).unwrap();
+            let matched_query = &line[start_idx_of_match..(start_idx_of_match + query.len())];
+
+            matches.push(Match::new(matched_query, line, idx));
+        }
+    }
+
+    matches
+}
+
+pub fn colorize_matches(matches: Vec<Match>) -> Vec<String> {
     let mut colorized: Vec<String> = Vec::new();
 
     for e in matches {
-        let colored = str::replace(e.line, query, &query.bright_purple().bold().to_string());
+        let colored = str::replace(
+            e.line,
+            e.matched_query,
+            &e.matched_query.bright_purple().bold().to_string(),
+        );
 
         let formatted = format!("{}. {}", (e.index + 1).to_string(), colored);
         colorized.push(formatted);
@@ -52,10 +76,14 @@ The most loved programming languages are:
     #[test]
     fn search_case_insensitive() {
         assert_eq!(
-            search(QUERY, CONTENT),
+            search_insensitive(QUERY, CONTENT),
             vec![
-                Match::new("The most loved programming languages are:", 0),
-                Match::new("2. The Rust Programming Langauge.", 2)
+                Match::new(
+                    "programming",
+                    "The most loved programming languages are:",
+                    0
+                ),
+                Match::new("Programming", "2. The Rust Programming Langauge.", 2)
             ]
         );
     }
@@ -64,7 +92,11 @@ The most loved programming languages are:
     fn search_case_sensitive() {
         assert_eq!(
             search(QUERY, CONTENT),
-            vec![Match::new("The most loved programming languages are:", 0)]
+            vec![Match::new(
+                "programming",
+                "The most loved programming languages are:",
+                0
+            )]
         );
     }
 
