@@ -1,39 +1,33 @@
-use std::{error::Error, fs};
+use std::{env::Args, error::Error, fs};
 mod core;
 mod utils;
-use colored::Colorize;
 pub use utils::*;
 
 #[derive(Eq, PartialEq, Debug)]
-pub struct Config<'a> {
-    query: &'a str,
-    file_location: &'a str,
+pub struct Config {
+    query: String,
+    file_location: String,
     case_sensitive: bool,
 }
 
-impl<'a> Config<'a> {
-    pub fn new(args: &'a [String], env_case_sensitive: bool) -> Result<Config, String> {
-        if args.len() < 3 {
-            let msg = format!(
-                "not enough arguments\n{} {} {} {} {}\n{} {} {}",
-                "Usage:".cyan(),
-                "minigrep".bright_purple(),
-                "[QUERY]".green(),
-                "[FILE_PATH]".green(),
-                "`i`".yellow(),
-                "Info:".cyan(),
-                "[Required]".green(),
-                "`Optional`".yellow(),
-            );
-            return Err(msg);
-        }
+impl Config {
+    pub fn new(mut args: Args, env_case_sensitive: bool) -> Result<Config, String> {
+        // Skip first arg which is binary name
+        args.next();
 
-        let query = &args[1];
-        let file_location = &args[2];
-        let case_sensitive = args.get(3).is_some();
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err(help_msg()),
+        };
+        let file_location = match args.next() {
+            Some(arg) => arg,
+            None => return Err(help_msg()),
+        };
 
-        let case_sensitive = if case_sensitive {
-            &args[3] != "i"
+        let case_sensitive = args.next();
+
+        let case_sensitive = if let Some(v) = case_sensitive {
+            v != "i"
         } else {
             env_case_sensitive
         };
@@ -47,12 +41,12 @@ impl<'a> Config<'a> {
 }
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let file = fs::read_to_string(config.file_location)?;
+    let file = fs::read_to_string(&config.file_location)?;
 
     let matches = if config.case_sensitive {
-        core::search(config.query, &file)
+        core::search(&config.query, &file)
     } else {
-        core::search_insensitive(config.query, &file)
+        core::search_insensitive(&config.query, &file)
     };
 
     let colorized_matches = core::colorize_matches(matches);
@@ -68,6 +62,8 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod config_struct {
+    use std::env::Args;
+
     use crate::Config;
 
     #[test]

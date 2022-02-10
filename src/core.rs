@@ -18,47 +18,41 @@ impl<'a> Match<'a> {
 }
 
 pub fn search<'a>(query: &'a str, content: &'a str) -> Vec<Match<'a>> {
-    let mut matches: Vec<Match> = vec![];
-
-    for (idx, line) in content.lines().enumerate() {
-        if line.contains(query) {
-            matches.push(Match::new(query, line, idx));
-        }
-    }
-
-    matches
+    content
+        .lines()
+        .enumerate()
+        .filter(|(_, line)| line.contains(query))
+        .map(|(index, line)| Match::new(query, line, index))
+        .collect()
 }
 
 pub fn search_insensitive<'a>(query: &'a str, content: &'a str) -> Vec<Match<'a>> {
-    let mut matches: Vec<Match> = vec![];
-
-    for (idx, line) in content.lines().enumerate() {
-        if line.to_lowercase().contains(&query.to_lowercase()) {
+    content
+        .lines()
+        .enumerate()
+        .filter(|(_, line)| line.to_lowercase().contains(&query.to_lowercase()))
+        .map(|(index, line)| {
             let start_idx_of_match = line.to_lowercase().find(&query.to_lowercase()).unwrap();
             let matched_query = &line[start_idx_of_match..(start_idx_of_match + query.len())];
 
-            matches.push(Match::new(matched_query, line, idx));
-        }
-    }
-
-    matches
+            Match::new(matched_query, line, index)
+        })
+        .collect()
 }
 
 pub fn colorize_matches(matches: Vec<Match>) -> Vec<String> {
-    let mut colorized: Vec<String> = Vec::new();
+    matches
+        .into_iter()
+        .map(|e| {
+            let colored = str::replace(
+                e.line,
+                e.matched_query,
+                &e.matched_query.bright_purple().bold().to_string(),
+            );
 
-    for e in matches {
-        let colored = str::replace(
-            e.line,
-            e.matched_query,
-            &e.matched_query.bright_purple().bold().to_string(),
-        );
-
-        let formatted = format!("{}. {}", (e.index + 1).to_string(), colored);
-        colorized.push(formatted);
-    }
-
-    colorized
+            format!("{}. {}", (e.index + 1).to_string(), colored)
+        })
+        .collect()
 }
 
 #[cfg(test)]

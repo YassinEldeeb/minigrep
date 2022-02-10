@@ -24,3 +24,18 @@ pub fn print_success_msg(config: Config, num_of_matches: usize) {
         ":".bright_white()
     );
 }
+
+pub fn help_msg() -> String {
+    let msg = format!(
+        "not enough arguments\n{} {} {} {} {}\n{} {} {}",
+        "Usage:".cyan(),
+        "minigrep".bright_purple(),
+        "[QUERY]".green(),
+        "[FILE_PATH]".green(),
+        "`i`".yellow(),
+        "Info:".cyan(),
+        "[Required]".green(),
+        "`Optional`".yellow(),
+    );
+    msg
+}
