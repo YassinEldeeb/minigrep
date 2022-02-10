@@ -9,3 +9,9 @@ edition = "2021"
 colored = "2"
 term = "*"
 
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "search"
+harness = false

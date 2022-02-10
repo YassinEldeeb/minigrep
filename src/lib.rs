@@ -1,5 +1,5 @@
 use std::{env::Args, error::Error, fs};
-mod core;
+pub mod core;
 mod utils;
 pub use utils::*;
 
@@ -58,70 +58,4 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     }
 
     Ok(())
-}
-
-#[cfg(test)]
-mod config_struct {
-    use std::env::Args;
-
-    use crate::Config;
-
-    #[test]
-    fn not_enough_args() {
-        let args = [0.to_string(), 1.to_string()];
-        if let Err(msg) = Config::new(&args, false) {
-            assert!(msg.contains("not enough arguments"))
-        }
-    }
-
-    #[test]
-    fn arguments_override_envs() {
-        let query = "word";
-        let file_location = "hello.txt";
-        let args = [
-            0.to_string(),
-            query.to_string(),
-            file_location.to_string(),
-            "sensitive".to_string(),
-        ];
-
-        // If env=true & arg=false
-        // arg should take the precedence
-        if let Ok(config) = Config::new(&args, false) {
-            let equivalent = Config {
-                query,
-                file_location,
-                case_sensitive: true,
-            };
-            assert_eq!(config, equivalent);
-        }
-    }
-
-    #[test]
-    fn instantiate_new_config() {
-        let query = "word";
-        let file_location = "hello.txt";
-        let args = [
-            "0".to_string(),
-            query.to_string(),
-            file_location.to_string(),
-        ];
-
-        if let Ok(config) = Config::new(&args, false) {
-            let equivalent = Config {
-                query,
-                file_location,
-                case_sensitive: false,
-            };
-            assert_eq!(config, equivalent);
-        }
-        if let Ok(config) = Config::new(&args, true) {
-            let equivalent = Config {
-                query,
-                file_location,
-                case_sensitive: true,
-            };
-            assert_eq!(config, equivalent);
-        }
-    }
 }
