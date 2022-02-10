@@ -25,6 +25,25 @@ pub fn print_success_msg(config: Config, num_of_matches: usize) {
     );
 }
 
+/// Returns a `String` for the formatted help message
+/// when a user doesn't use the CLI properly with the correct arguments.
+/// # Example
+///
+/// ```rust
+/// use minigrep;
+///
+/// println!("{}", minigrep::help_msg());
+/// ```
+///
+/// # Result in terminal
+///
+/// ```sh
+/// $ cargo run
+/// Problem parsing arguments: not enough arguments
+/// Usage: minigrep [QUERY] [FILE_PATH] `i`        
+/// Info: [Required] `Optional`
+/// ```
+
 pub fn help_msg() -> String {
     let msg = format!(
         "not enough arguments\n{} {} {} {} {}\n{} {} {}",
