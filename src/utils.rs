@@ -30,9 +30,9 @@ pub fn print_success_msg(config: Config, num_of_matches: usize) {
 /// # Example
 ///
 /// ```rust
-/// use minigrep;
+/// use joyful_minigrep;
 ///
-/// println!("{}", minigrep::help_msg());
+/// println!("{}", joyful_minigrep::help_msg());
 /// ```
 ///
 /// # Result in terminal

@@ -257,6 +257,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1aab8fc367588b89dcee83ab0fd66b72b50b72fa1904d7095045ace2b0c81c35"
 
 [[package]]
+name = "joyful_minigrep"
+version = "0.1.0"
+dependencies = [
+ "colored",
+ "criterion",
+ "term",
+]
+
+[[package]]
 name = "js-sys"
 version = "0.3.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -299,15 +308,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5aa361d4faea93603064a027415f07bd8e1d5c88c9fbf68bf56a285428fd79ce"
 dependencies = [
  "autocfg",
-]
-
-[[package]]
-name = "minigrep"
-version = "0.1.0"
-dependencies = [
- "colored",
- "criterion",
- "term",
 ]
 
 [[package]]

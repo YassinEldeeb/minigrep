@@ -1,5 +1,5 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use minigrep::core::{search, search_insensitive};
+use joyful_minigrep::core::{search, search_insensitive};
 
 fn search_benchmark(c: &mut Criterion) {
     c.bench_function("sensitive", |b| {
