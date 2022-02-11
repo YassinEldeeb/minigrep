@@ -43,7 +43,6 @@ pub fn print_success_msg(config: Config, num_of_matches: usize) {
 /// Usage: minigrep [QUERY] [FILE_PATH] `i`        
 /// Info: [Required] `Optional`
 /// ```
-
 pub fn help_msg() -> String {
     let msg = format!(
         "not enough arguments\n{} {} {} {} {}\n{} {} {}",

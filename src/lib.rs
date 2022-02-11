@@ -1,3 +1,7 @@
+//! # Minigrep
+//!
+//! `minigrep` is the best, it's just the best what should I say?
+
 use std::{env::Args, error::Error, fs};
 pub mod core;
 mod utils;
